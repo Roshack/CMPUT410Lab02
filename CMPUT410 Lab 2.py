@@ -28,10 +28,11 @@ print 'Socket now listening'
 def clientthread(conn):
     while True:
         data = conn.recv(1024)
-        if (ord(str(data).strip()[0]) == 27):
-            reply = "OMG YOU HIT ESCAPE GOODBYE\r\n"
-            conn.sendall(reply)
-            break
+        if (len(str(data).strip()) == 1):
+            if  (ord(str(data).strip()[0]) == 27):
+                reply = "OMG YOU HIT ESCAPE GOODBYE\r\n"
+                conn.sendall(reply)
+                break
         reply = str(data).strip() + " Rob Hackman\r\n"
         if not data:
             break
