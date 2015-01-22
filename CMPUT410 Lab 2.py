@@ -23,31 +23,26 @@ print 'Socket bind complete'
 #Start listening on socket
 s.listen(10)
 print 'Socket now listening'
- 
-#Function for handling connections. This will be used to create threads
+
+
 def clientthread(conn):
-     
-    #infinite loop so that function do not terminate and thread do not end.
     while True:
-         
-        #Receiving from client
         data = conn.recv(1024)
+        if (ord(str(data).strip()[0]) == 27):
+            reply = "OMG YOU HIT ESCAPE GOODBYE\r\n"
+            conn.sendall(reply)
+            break
         reply = str(data).strip() + " Rob Hackman\r\n"
         if not data:
             break
      
         conn.sendall(reply)
-     
-    #came out of loop
     conn.close()
- 
-#now keep talking with the client
+    
 while 1:
-    #wait to accept a connection - blocking call
     conn, addr = s.accept()
     print 'Connected with ' + addr[0] + ':' + str(addr[1])
-     
-    #start new thread takes 1st argument as a function name to be run, second is the tuple of arguments to the function.
+
     start_new_thread(clientthread ,(conn,))
  
 s.close()
